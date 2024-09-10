@@ -87,17 +87,13 @@
         #download-btn:hover {
             background-color: #007bb5;
         }
-
-        img {
-            display: block;
-            margin: 0 auto;
-        }
     </style>
 </head>
 
 <body>
     <div class="container">
-        <img id="repica-img" alt="Repica" style="width:400px" src="https://www.cocatram.org.ni/wp-content/uploads/2023/06/Logo_Repica_46_Top_Web_Cocatram.jpg">
+        <img id="repica-img" alt="Repica" style="width:400px"
+            src="https://www.cocatram.org.ni/wp-content/uploads/2023/06/Logo_Repica_46_Top_Web_Cocatram.jpg">
         <h1>Generador de Código de Barras</h1>
         <br>
         <form id="barcode-form">
@@ -116,19 +112,21 @@
         <div class="barcode" id="barcode-container">
             <div id="barcode-info-name" style="display: none;"></div>
             <div id="barcode-info-organization" style="display: none;"></div>
-            <img id="barcode-img" alt="Código de Barras" style="display:none;">
+            <canvas id="barcode-canvas"></canvas>
         </div>
         <button id="download-btn" onclick="downloadBarcode()">Descargar</button>
     </div>
 
+    <!-- Incluye la biblioteca JsBarcode -->
+    <script src="https://cdn.jsdelivr.net/npm/jsbarcode@3.11.0/dist/JsBarcode.all.min.js"></script>
     <script>
         function generateBarcode() {
             const name = document.getElementById('name').value;
             const organization = document.getElementById('organization').value;
             const code = document.getElementById('code').value;
+            const barcodeCanvas = document.getElementById('barcode-canvas');
             const barcodeName = document.getElementById('barcode-info-name');
             const barcodeOrganization = document.getElementById('barcode-info-organization');
-            const barcodeImg = document.getElementById('barcode-img');
 
             if (name && organization && code) {
                 // Mostrar el nombre y la organización
@@ -137,9 +135,29 @@
                 barcodeName.style.display = 'block';
                 barcodeOrganization.style.display = 'block';
 
+                // Configurar el tamaño del canvas
+                barcodeCanvas.width = 400; // Ajusta según sea necesario
+                barcodeCanvas.height = 150; // Ajusta según sea necesario
+
+                const ctx = barcodeCanvas.getContext('2d');
+                ctx.clearRect(0, 0, barcodeCanvas.width, barcodeCanvas.height);
+
                 // Generar el código de barras
-                barcodeImg.src = `https://barcode.tec-it.com/barcode.ashx?data=${code}&code=Code128&translate-esc=on&imagetype=Jpg&download=true&no-text=true`;
-                barcodeImg.style.display = 'block';
+                JsBarcode(barcodeCanvas, code, {
+                    format: 'CODE128',
+                    displayValue: false,
+                    width: 2,
+                    height: 100,
+                    margin: 10
+                });
+
+                // Añadir texto al canvas
+                ctx.font = '16px Arial';
+                ctx.textAlign = 'center';
+                ctx.fillStyle = '#000';
+
+                ctx.fillText(name, barcodeCanvas.width / 2, 30);
+                ctx.fillText(organization, barcodeCanvas.width / 2, 50);
 
                 // Mostrar el botón de descarga
                 document.getElementById('download-btn').style.display = 'inline-block';
@@ -149,10 +167,10 @@
         }
 
         function downloadBarcode() {
-            const barcodeImg = document.getElementById('barcode-img');
+            const barcodeCanvas = document.getElementById('barcode-canvas');
             const link = document.createElement('a');
-            link.href = barcodeImg.src;
-            link.download = `barcode${name}-${organization}.jpg`;
+            link.href = barcodeCanvas.toDataURL('image/png');
+            link.download = `barcode_${document.getElementById('name').value}_${document.getElementById('organization').value}.png`;
             link.click();
         }
     </script>
