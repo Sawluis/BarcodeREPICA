@@ -152,7 +152,7 @@
             const barcodeImg = document.getElementById('barcode-img');
             const link = document.createElement('a');
             link.href = barcodeImg.src;
-            link.download = 'barcode.jpg';
+            link.download = `barcode${name}-${organization}.jpg`;
             link.click();
         }
     </script>
