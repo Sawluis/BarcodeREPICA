@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Generador de Códigos de Barras</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #f4f4f4;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            text-align: center;
+        }
+
+        .container {
+            max-width: 600px;
+            margin: 0 auto;
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        h1 {
+            color: #333;
+        }
+
+        form {
+            margin-bottom: 20px;
+        }
+
+        label {
+            display: block;
+            margin: 10px 0 5px;
+            font-weight: bold;
+        }
+
+        input[type="text"] {
+            width: calc(100% - 20px);
+            padding: 10px;
+            margin-bottom: 15px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            font-size: 16px;
+        }
+
+        button {
+            padding: 10px 20px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background-color: #45a049;
+        }
+
+        .barcode {
+            margin-top: 20px;
+            text-align: center;
+        }
+
+        #barcode-info-name,
+        #barcode-info-organization {
+            font-size: 18px;
+            margin-bottom: 5px;
+        }
+
+        #download-btn {
+            display: none;
+            margin-top: 10px;
+            padding: 10px 20px;
+            background-color: #008CBA;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        #download-btn:hover {
+            background-color: #007bb5;
+        }
+
+        img {
+            display: block;
+            margin: 0 auto;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <img id="repica-img" alt="Repica" style="width:400px" src="https://www.cocatram.org.ni/wp-content/uploads/2023/06/Logo_Repica_46_Top_Web_Cocatram.jpg">
+        <h1>Generador de Código de Barras</h1>
+        <br>
+        <form id="barcode-form">
+            <label for="name">Nombre:</label>
+            <input type="text" id="name" placeholder="Ingresa tu nombre" required>
+
+            <label for="organization">Organización:</label>
+            <input type="text" id="organization" placeholder="Ingresa tu organización" required>
+
+            <label for="code">Código:</label>
+            <input type="text" id="code" placeholder="Ingresa el código" required>
+
+            <button type="button" onclick="generateBarcode()">Generar</button>
+        </form>
+
+        <div class="barcode" id="barcode-container">
+            <div id="barcode-info-name" style="display: none;"></div>
+            <div id="barcode-info-organization" style="display: none;"></div>
+            <img id="barcode-img" alt="Código de Barras" style="display:none;">
+        </div>
+        <button id="download-btn" onclick="downloadBarcode()">Descargar</button>
+    </div>
+
+    <script>
+        function generateBarcode() {
+            const name = document.getElementById('name').value;
+            const organization = document.getElementById('organization').value;
+            const code = document.getElementById('code').value;
+            const barcodeName = document.getElementById('barcode-info-name');
+            const barcodeOrganization = document.getElementById('barcode-info-organization');
+            const barcodeImg = document.getElementById('barcode-img');
+
+            if (name && organization && code) {
+                // Mostrar el nombre y la organización
+                barcodeName.textContent = name;
+                barcodeOrganization.textContent = organization;
+                barcodeName.style.display = 'block';
+                barcodeOrganization.style.display = 'block';
+
+                // Generar el código de barras
+                barcodeImg.src = `https://barcode.tec-it.com/barcode.ashx?data=${code}&code=Code128&translate-esc=on&imagetype=Jpg&download=true&no-text=true`;
+                barcodeImg.style.display = 'block';
+
+                // Mostrar el botón de descarga
+                document.getElementById('download-btn').style.display = 'inline-block';
+            } else {
+                alert("Por favor rellene todos los campos.");
+            }
+        }
+
+        function downloadBarcode() {
+            const barcodeImg = document.getElementById('barcode-img');
+            const link = document.createElement('a');
+            link.href = barcodeImg.src;
+            link.download = 'barcode.jpg';
+            link.click();
+        }
+    </script>
+</body>
+
+</html>
