@@ -67,10 +67,18 @@
             text-align: center;
         }
 
-        #barcode-info-name,
+        #barcode-info-name {
+            font-size: 23pt;
+            color: #1d71b8;
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+
         #barcode-info-organization {
-            font-size: 18px;
-            margin-bottom: 5px;
+            font-size: 18pt;
+            color: #262e61;
+            font-weight: bold;
+            margin-bottom: 20px;
         }
 
         #download-btn {
@@ -152,14 +160,16 @@
                 });
 
                 // Añadir texto al canvas
-                ctx.font = '16px Arial';
+                ctx.font = 'bold 23pt Helvetica';
                 ctx.textAlign = 'center';
-                ctx.fillStyle = '#000';
-
+                ctx.fillStyle = '#1d71b8';
                 ctx.fillText(name, barcodeCanvas.width / 2, 30);
+
+                ctx.font = 'bold 18pt Helvetica';
+                ctx.textAlign = 'center';
+                ctx.fillStyle = '#262e61';
                 ctx.fillText(organization, barcodeCanvas.width / 2, 50);
 
-                // Mostrar el botón de descarga
                 document.getElementById('download-btn').style.display = 'inline-block';
             } else {
                 alert("Por favor rellene todos los campos.");
