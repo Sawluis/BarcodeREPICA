@@ -109,7 +109,8 @@
             <input type="text" id="name" placeholder="Ingresa tu nombre" required>
 
             <label for="organization">Organización:</label>
-            <input type="text" id="organization" placeholder="Ingresa tu organización" required>
+            <textarea id="organization" placeholder="Ingresa tu organización" rows="3" style="width: calc(100% - 20px);"
+                required></textarea>
 
             <label for="code">Código:</label>
             <input type="text" id="code" placeholder="Ingresa el código" required>
@@ -130,7 +131,7 @@
     <script>
         function generateBarcode() {
             const name = document.getElementById('name').value;
-            const organization = document.getElementById('organization').value;
+            const organization = document.getElementById('organization').value.replace(/\n/g, '<br>');
             const code = document.getElementById('code').value;
             const barcodeCanvas = document.getElementById('barcode-canvas');
             const barcodeName = document.getElementById('barcode-info-name');
@@ -139,7 +140,7 @@
             if (name && organization && code) {
                 // Mostrar el nombre y la organización
                 barcodeName.textContent = name;
-                barcodeOrganization.textContent = organization;
+                barcodeOrganization.innerHTML = organization;
                 barcodeName.style.display = 'block';
                 barcodeOrganization.style.display = 'block';
 
